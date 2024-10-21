@@ -1,3 +1,5 @@
+library(ggplot2)
+library(gridExtra)
 # simulating a BAS stochastic model by creating functions for each sub-process
 
 # survival
@@ -45,18 +47,17 @@ model <- function(N0, phi, rho, p, nyears=25){
     pop[1,] <- N0
     obs[1,] <- detection(pop[1,], p)
     for (i in 2:nyears){
-        pop[i,] <- pop[i-1,] |> 
-            survival(phi) |> 
-            ageing() |> 
-            reproduction(rho)
+        pop[i,] <- pop[i-1,] |> survival(phi) |> ageing() |> reproduction(rho)
         obs[i,] <- pop[i,] |> detection(p)
     }
 
-    # return results as dataframe
+    # return results as list
     dat <- data.frame(
-        year=1:nyears,
-        pop=pop,
-        obs=obs
+        year = 1:nyears,
+        pop_1 = pop[,1], pop_2 = pop[,2], pop_3 = pop[,3], pop_4 = pop[,4],
+        pop_total = rowSums(pop),
+        obs_1 = obs[,1], obs_2 = obs[,2], obs_3 = obs[,3], obs_4 = obs[,4],
+        obs_total =rowSums(obs)
     )
     return(dat)
 }
@@ -68,4 +69,33 @@ rho <- c(0.0, 0.9, 1.9, 0.0)
 p <- 0.5
 
 sim <- model(n0, phi, rho, p, 25)
-print(sim)
+
+# Plotting first year individuals and observation
+first_year <- ggplot(sim, aes(x=year)) +
+    geom_line(aes(y=pop_1), color="dodgerblue") +
+    geom_line(aes(y=obs_1), color="deepskyblue", linetype="dashed") +
+    theme_minimal() + 
+    labs(title="First year individuals and observations", x="Year", y="Number of individuals")
+
+# Similar for 2nd/3rd/4th year
+second_year <- ggplot(sim, aes(x=year)) +
+    geom_line(aes(y=pop_2), color="dodgerblue") +
+    geom_line(aes(y=obs_2), color="deepskyblue", linetype="dashed") +
+    theme_minimal() + 
+    labs(title="Second year individuals and observations", x="Year", y="Number of individuals") 
+
+third_year <- ggplot(sim, aes(x=year)) +
+    geom_line(aes(y=pop_3), color="dodgerblue") +
+    geom_line(aes(y=obs_3), color="deepskyblue", linetype="dashed") +
+    theme_minimal() + 
+    labs(title="Third year individuals and observations", x="Year", y="Number of individuals")
+
+fourth_year <- ggplot(sim, aes(x=year)) +
+    geom_line(aes(y=pop_4), color="dodgerblue") +
+    geom_line(aes(y=obs_4), color="deepskyblue", linetype="dashed") +
+    theme_minimal() + 
+    labs(title="Fourth year individuals and observations", x="Year", y="Number of individuals")
+
+# put plots in a list to produce the output png, this is a bit clunky but it works
+plot_list <- list(first_year, second_year, third_year, fourth_year)
+ggsave(file="plots/yearlybreakdown.png", arrangeGrob(grobs=plot_list, ncol=2, nrow=2), width=16, height=9)
