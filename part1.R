@@ -57,7 +57,7 @@ model <- function(N0, phi, rho, p, nyears=25){
         pop_1 = pop[,1], pop_2 = pop[,2], pop_3 = pop[,3], pop_4 = pop[,4],
         pop_total = rowSums(pop),
         obs_1 = obs[,1], obs_2 = obs[,2], obs_3 = obs[,3], obs_4 = obs[,4],
-        obs_total =rowSums(obs)
+        obs_total = rowSums(obs)
     )
     return(dat)
 }
