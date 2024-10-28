@@ -51,7 +51,7 @@ model <- function(N0, phi, rho, p, nyears=25){
         obs[i,] <- pop[i,] |> detection(p)
     }
 
-    # return results as list
+    # return results as data frame
     dat <- data.frame(
         year = 1:nyears,
         pop_1 = pop[,1], pop_2 = pop[,2], pop_3 = pop[,3], pop_4 = pop[,4],

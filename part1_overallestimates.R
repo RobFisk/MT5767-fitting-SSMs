@@ -11,6 +11,7 @@ p <- 0.5
 # simulation many times to get ranges
 nsim <- 1000
 nyears <- 25
+
 totals <- matrix(nrow=nsim, ncol=nyears)
 esttotals <- matrix(nrow=nsim, ncol=nyears)
 for (i in 1:nsim){
