@@ -17,9 +17,9 @@ Equations may be the challenging part. To write an in-line equation or mathemati
 
 
 
-## Question 1
+# Question 1
 
-For continuity and simplicity, I will answer questions a. and b. together, discussing each stage of the dynamics and how these are implemented in R before combining them into a script for the whole model.
+## For continuity and simplicity, I will answer questions a. and b. together, discussing each stage of the dynamics and how these are implemented in R before combining them into a script for the whole model.
 
 First in the BAS model is survival, which can be modelled using a binomial distribution, as there are only two outcomes (survival or death) and the probability is fixed within each age class. A function to implement this takes a population vector and a vector of survival probabilities for each class, phi. 
 
@@ -123,6 +123,10 @@ p <- 0.5 # detection probability
 sim <- model(n0, phi, rho, p)
 ```
 
-- **Simulate and plot 25 years of age-specific population dynamics and observations and produce an informative visualisation of the data.**
+## Simulate and plot 25 years of age-specific population dynamics and observations and produce an informative visualisation of the data.
 
 
+![Yearly Breakdown](plots/yearlybreakdown.png)
+
+
+![Overall Quartiles](plots/ul_quartiles.png)
