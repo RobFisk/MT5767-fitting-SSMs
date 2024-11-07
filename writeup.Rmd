@@ -1,8 +1,19 @@
 ---
-title: "Part 1"
-author: "Rob Fisk"
-date: "21/10/2024"
-output: pdf_document
+title: 'MT5767 Group Assignment 1 '
+author: 'Student ID: 200015016, x, y'
+output:
+  bookdown::html_document2:
+    number_sections: true
+    toc: false
+  bookdown::pdf_document2:
+    number_sections: true
+    toc: false
+  html_document:
+    toc: false
+    df_print: paged
+  pdf_document:
+    toc: false
+bibliography: false
 ---
 
 ```{r setup, include=FALSE}
@@ -32,7 +43,7 @@ First in the BAS model is survival, which can be modelled using a binomial distr
 
 $$ $$
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = TRUE}
 survival <- function(pop, phi){
     newpop <- rep(0, length(pop))
     for (i in 1:length(pop)){
@@ -44,7 +55,7 @@ survival <- function(pop, phi){
 
 Next comes ageing, which is a deterministic process (all animals age each year) so needs no stochastic component. This process could have been included within the survival code, but for clarity we define it as below, moving each animal forward one age class. 
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = TRUE}
 ageing <- function(pop){
     newpop <- rep(0, length(pop))
     for (i in 1:(length(pop)-1)){
@@ -58,7 +69,7 @@ Lastly in the model comes reproduction. As animals in years 2 and 3 give birth t
 
 $$ $$
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = TRUE}
 reproduction <- function(pop, rho){
     births <- 0
     for (i in 1:length(pop)){
@@ -73,7 +84,7 @@ Finally, once the underlying dynamics have been implemented, we have to add a fi
 
 $$ $$
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = TRUE}
 detection <- function(pop, p){
     detected <- rep(0, length(pop))
     for (i in 1:length(pop)){
@@ -85,7 +96,7 @@ detection <- function(pop, p){
 
 Now we have defined each component of the model, we can very easily combine them to simulate the dynamics over a number of years, as seen below.
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = TRUE}
 # putting it all together to observe dynamics
 model <- function(N0, phi, rho, p, nyears=25){
     # initialise matrix with n0 and an observation of n0
@@ -119,7 +130,7 @@ Here we see the huge advantage to this functional approach to the model, as all 
 
 To specify our population dynamics and simulate the true and detected populations, we simply need to define the starting population N0; the survival and reproduction rates for each age and the constant detection rate. This is done below to allow the model to be simulated. 
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = TRUE}
 # parameters as given in the project
 n0 <- c(120, 70, 50, 30) # initial population
 phi <- c(0.45, 0.7, 0.7, 0.0) # survival rates
@@ -137,6 +148,8 @@ sim <- model(n0, phi, rho, p)
 
 
 ![Overall Quartiles](plots/ul_quartiles.png)
+
+\newpage
 
 
 # Question 3
@@ -225,7 +238,7 @@ proj_4 <- rain_rk(fit_4$par, years = yrs, removals = rmv, Nhat = Nhat,
 
 ## Part 1
 
-a.)	When K is modelled as a function of the current year’s rainfall (scenario 1), the value of Beta 1 is equal to 1.04 whereas when K is modelled as a function of the previous year’s rainfall (scenario 2), this number falls to -0.0286 (See Table \@ref(tab:Beta1table)). In order to find the real effect of Beta 1 on carrying capacity, we have to take it’s exponent. When we do that for scenario 1, we see that for every unit increase in rainfall, carrying capacity by a factor of roughly 2.83. In scenario 2 we see that carrying capacity shrinks by a factor of roughly 0.98 for every unit increase in rainfall. The scale of the effect of rainfall in scenario 2 (that is rainfall from the previous year) appears much reduced compared to scenario 1. In the context of this study, it means that, based on our observations, changes in observed population numbers of wildebeest are not reflected as much in changes in the previous years rainfall compared to the current years rainfall.
+a.)	When K is modelled as a function of the current year's rainfall (scenario 1), the value of Beta 1 is equal to 1.04 whereas when K is modelled as a function of the previous year's rainfall (scenario 2), this number falls to -0.0286 (See Table \@ref(tab:Beta1table)). In order to find the real effect of Beta 1 on carrying capacity, we have to take it's exponent. When we do that for scenario 1, we see that for every unit increase in rainfall, carrying capacity by a factor of roughly 2.83. In scenario 2 we see that carrying capacity shrinks by a factor of roughly 0.98 for every unit increase in rainfall. The scale of the effect of rainfall in scenario 2 (that is rainfall from the previous year) appears much reduced compared to scenario 1. In the context of this study, it means that, based on our observations, changes in observed population numbers of wildebeest are not reflected as much in changes in the previous years rainfall compared to the current years rainfall.
 
 
 ```{r beta1 table}
@@ -247,7 +260,7 @@ kable(k_table)
 
 ```
 
-b.)	Comparison of AIC values for models generated for the two scenarios show us that modelling carrying capacity as a function of rainfall in the current year appears fits the data better than modelling it as a function of the previous year’s rainfall (Scenario 1 AIC: -19.99; Scenario 2 AIC: -17.08; See Table \@ref(tab:AICtable) for exact values).
+b.)	Comparison of AIC values for models generated for the two scenarios show us that modelling carrying capacity as a function of rainfall in the current year appears fits the data better than modelling it as a function of the previous year's rainfall (Scenario 1 AIC: -19.99; Scenario 2 AIC: -17.08; See Table \@ref(tab:AICtable) for exact values).
 
 ## Part 2
 
