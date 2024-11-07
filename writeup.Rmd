@@ -16,13 +16,7 @@ library(scales) #all the packages I will be using in this analysis
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Here is a very basic skeleton guide to give a sense of what I expect from the assignment. Hopefully this helps. Not sure how much rmarkdown you have been exposed to, but in case you wanted to (learn to) use it, here you go. This pdf is generated from the code I sent, but changing the output in the first few lines to html_document will produce an html file. You can submit pdf, html, or word to moodle and you definitely don't have to use markdown (although it allows you to embed code and therefore avoids having to submit multiple files). Please ask if you aren't sure.
-
-Okay, below would be a perfectly acceptable way to approach the assignment. I like emphasizing the importance of sharing and annotating code. So I hope this is a practice you can adopt. It won't affect your grade, but I do need to be able to follow along so I can see what you did if things dont quite look right. 
-
-Equations may be the challenging part. To write an in-line equation or mathematical symbol, you us single dollar signs ($\sigma$) and an equation on its own line requires double dollar signs:
-
-
+Everyone contributed equally to writing the code and interpreting the results. RF focused mostly on question 1, SB on question 2 and SD on question 3. All 3 contributed to the report writing and overall the contribution was deemed to be roughly equal and workload distributed fairly among the group. 
 
 # Question 1
 
@@ -30,7 +24,6 @@ Equations may be the challenging part. To write an in-line equation or mathemati
 
 First in the BAS model is survival, which can be modelled using a binomial distribution, as there are only two outcomes (survival or death) and the probability is fixed within each age class. A function to implement this takes a population vector and a vector of survival probabilities for each class, phi. 
 
-$$ $$
 
 ```{r, eval=FALSE}
 survival <- function(pop, phi){
@@ -56,8 +49,6 @@ ageing <- function(pop){
 
 Lastly in the model comes reproduction. As animals in years 2 and 3 give birth to a discrete number of individuals at a rate with constant mean, the poisson distribution is appropriate to use for reproduction. This can be implemented by summing the poisson additions from all adults. You could also generate a single observation from a single combined poisson variable, but I find this the most intuitive way to formulate the code.
 
-$$ $$
-
 ```{r, eval=FALSE}
 reproduction <- function(pop, rho){
     births <- 0
@@ -70,8 +61,6 @@ reproduction <- function(pop, rho){
 ```
 
 Finally, once the underlying dynamics have been implemented, we have to add a final stochastic component - detection. There is no double counting and each individual has a fixed probability of being detected or not detected so detection can be implemented using a binomial distribution, in a very similar way to survival earlier.
-
-$$ $$
 
 ```{r, eval=FALSE}
 detection <- function(pop, p){
