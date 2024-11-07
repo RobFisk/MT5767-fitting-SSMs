@@ -132,9 +132,13 @@ sim <- model(n0, phi, rho, p)
 
 ## Simulate and plot 25 years of age-specific population dynamics and observations and produce an informative visualisation of the data.
 
+Firstly we simulate a single set of population dynamics, and can see an example of how the dynamics look in each stage. There is a clear decline due to low survival rates and insufficient birth rates to support the population, but we do see some slight periodicity in the decline which is to be expected in a stochastic model where and overperformance in births one year (e.g. the first year) will lead to a stronger population for the coming years afterward (the spike in the graph below that appears in first year individuals in year 2, second years in year 3, etc. )
+
+The solid blue line represents the true population and the observations are given by the dotted line.
 
 ![Yearly Breakdown](plots/yearlybreakdown.png)
 
+To get a better sense of what we can expect the population to look like I have also plotted the upper quartile, lower quartile and median of the yearly total population in 1000 simulations. The population still tends to die out, but I found myself impressed by the fact that in 25% of cases the population still had 30+ members afte 25 years. Also, it speaks to the nature of stochastic dynamics that both the true and observed populations have huge variability from one simulation to the next. 
 
 ![Overall Quartiles](plots/ul_quartiles.png)
 
