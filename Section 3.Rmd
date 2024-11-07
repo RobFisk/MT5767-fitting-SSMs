@@ -2,10 +2,10 @@
 title: 'MT5767 Group Assignment 1 '
 author: 'Student ID: 200015016'
 output:
-  bookdown::html_document2:
+  bookdown::pdf_document2:
     number_sections: true
     toc: false
-  bookdown::pdf_document2:
+  bookdown::html_document2:
     number_sections: true
     toc: false
   html_document:
