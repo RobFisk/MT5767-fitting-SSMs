@@ -1,8 +1,19 @@
 ---
-title: "Part 1"
-author: "Rob Fisk"
-date: "21/10/2024"
-output: pdf_document
+title: 'MT5767 Group Assignment 1 '
+author: 'Student ID: 200015016, x, y'
+output:
+  bookdown::html_document2:
+    number_sections: true
+    toc: false
+  bookdown::pdf_document2:
+    number_sections: true
+    toc: false
+  html_document:
+    toc: false
+    df_print: paged
+  pdf_document:
+    toc: false
+bibliography: false
 ---
 
 ```{r setup, include=FALSE}
@@ -25,7 +36,7 @@ Everyone contributed equally to writing the code and interpreting the results. R
 First in the BAS model is survival, which can be modelled using a binomial distribution, as there are only two outcomes (survival or death) and the probability is fixed within each age class. A function to implement this takes a population vector and a vector of survival probabilities for each class, phi. 
 
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = TRUE}
 survival <- function(pop, phi){
     newpop <- rep(0, length(pop))
     for (i in 1:length(pop)){
@@ -37,7 +48,7 @@ survival <- function(pop, phi){
 
 Next comes ageing, which is a deterministic process (all animals age each year) so needs no stochastic component. This process could have been included within the survival code, but for clarity we define it as below, moving each animal forward one age class. 
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = TRUE}
 ageing <- function(pop){
     newpop <- rep(0, length(pop))
     for (i in 1:(length(pop)-1)){
@@ -49,7 +60,11 @@ ageing <- function(pop){
 
 Lastly in the model comes reproduction. As animals in years 2 and 3 give birth to a discrete number of individuals at a rate with constant mean, the poisson distribution is appropriate to use for reproduction. This can be implemented by summing the poisson additions from all adults. You could also generate a single observation from a single combined poisson variable, but I find this the most intuitive way to formulate the code.
 
-```{r, eval=FALSE}
+<<<<<<< HEAD
+$$ $$
+
+```{r, eval=FALSE, echo = TRUE}
+
 reproduction <- function(pop, rho){
     births <- 0
     for (i in 1:length(pop)){
@@ -62,7 +77,11 @@ reproduction <- function(pop, rho){
 
 Finally, once the underlying dynamics have been implemented, we have to add a final stochastic component - detection. There is no double counting and each individual has a fixed probability of being detected or not detected so detection can be implemented using a binomial distribution, in a very similar way to survival earlier.
 
-```{r, eval=FALSE}
+<<<<<<< HEAD
+$$ $$
+
+```{r, eval=FALSE, echo = TRUE}
+
 detection <- function(pop, p){
     detected <- rep(0, length(pop))
     for (i in 1:length(pop)){
@@ -74,7 +93,7 @@ detection <- function(pop, p){
 
 Now we have defined each component of the model, we can very easily combine them to simulate the dynamics over a number of years, as seen below.
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = TRUE}
 # putting it all together to observe dynamics
 model <- function(N0, phi, rho, p, nyears=25){
     # initialise matrix with n0 and an observation of n0
@@ -108,7 +127,7 @@ Here we see the huge advantage to this functional approach to the model, as all 
 
 To specify our population dynamics and simulate the true and detected populations, we simply need to define the starting population N0; the survival and reproduction rates for each age and the constant detection rate. This is done below to allow the model to be simulated. 
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo = TRUE}
 # parameters as given in the project
 n0 <- c(120, 70, 50, 30) # initial population
 phi <- c(0.45, 0.7, 0.7, 0.0) # survival rates
@@ -131,18 +150,16 @@ knitr::include_graphics("plots/yearlybreakdown.png")
 
 To get a better sense of what we can expect the population to look like I have also plotted the upper quartile, lower quartile and median of the yearly total population in 1000 simulations. The population still tends to die out, but I found myself impressed by the fact that in 25% of cases the population still had 30+ members afte 25 years. Also, it speaks to the nature of stochastic dynamics that both the true and observed populations have huge variability from one simulation to the next. 
 
-```{r pressure, echo=FALSE, fig.cap="Total Population over 1,000 simulations", out.width = '100%'}
+```{r pressure2, echo=FALSE, fig.cap="Total Population over 1,000 simulations", out.width = '100%'}
 knitr::include_graphics("plots/ul_quartiles.png")
 ```
 # Question 2
 
-## a. Rewriting the model for the case where removal occurs before growth.
+## Part 1
+
+The following is the model for our wildebeest population change adjusted so that growth occurs after individuals have been removed from the population.
 
 $N_t = (N_{t-1} - c_{t-1}) + r_t * (N_{t-1} - c_{t-1}) * [1 - (N_{t-1} - c_{t-1})/K_t]$
-
-```{r}
-library(ggplot2)
-```
 
 ```{r}
 # parameter setting
@@ -211,28 +228,46 @@ data <- data.frame(
   Model = rep(c("Removal After Growth", "Removal Before Growth", 
                 "Observed Removal After Growth", "Observed Removal Before Growth"), 
               each = years)
-)
+)  
+
+Observeddata <- data %>%
+  filter(Model %in% c("Observed Removal After Growth", "Observed Removal Before Growth"))
+
+Actualdata <- data %>%
+  filter(Model %in% c("Removal After Growth", "Removal Before Growth"))
+
 ```
 
 
-```{r}
-# visulisation
-ggplot(data, aes(x = Year, y = Population, color = Model, shape = Model)) +
-  geom_line() +
-  geom_point(size = 3) +
-  labs(title = "Population Dynamics Comparison",
-       x = "Years", y = "Population Size") +
-  theme_minimal() +
-  scale_color_manual(values = c("blue", "red", "green", "orange")) +
-  scale_shape_manual(values = c(19, 17, 16, 15)) 
+```{r, fig.width=12, warning = FALSE}
+#| label: part2plot
+#| fig.pos: "H"
+#| fig.cap: "Population size against time based on alternate modelling scenarios for a hypothetical population of wildebeest. Left: Actual population size under two modelling scenarios. Right: Observed population size under two modelling scenarios."
+
+#visualisation
+plota <- ggplot(Actualdata, aes(x = Year, y = Population, color = Model)) +
+            geom_line() +
+            geom_point(size = 3) +
+            labs(title = "Population Dynamics Comparison",
+                 x = "Years", y = "Population Size") +
+            scale_color_brewer(palette = "Set1")
+
+plotb <- ggplot(Observeddata, aes(x = Year, y = Population, color = Model)) +
+            geom_line() +
+            geom_point(size = 3) +
+            labs(title = "Population Dynamics Comparison",
+                 x = "Years", y = "Population Size") +
+            scale_color_brewer(palette = "Set1")
+
+grid.arrange(plota, plotb, ncol = 2)
 ```
-## b. Thinking biologically about modelling (r_t) as a function of t or t-1
+## Part 2
 
-The amount of rainfall in the previous year may affect the growth of plants, thus providing more food resources for the population in the New Year. Therefore, it may be more reasonable to consider (r_t) as a function of rainfall (R_{t-1}) at time (t-1).\newline
+The amount of rainfall in the previous year may affect the growth of plants, thus providing more food resources for the population in the New Year. Therefore, it may be more reasonable to consider (r_t) as a function of rainfall (R_{t-1}) at time (t-1).
 
-# c. Thinking biologically about modelling (K_t) as a function of t or t-1
+## Part 3
 
-Carrying capacity is limited by environmental resources (such as food and water). It may be more realistic to consider (K_t) as a function of rainfall (R_{t-1}) at time (t-1). This means that the rainfall conditions of the previous year determine the environmental carrying capacity of the current year.
+Carrying capacity is limited by environmental resources (such as food and water). It may be more realistic to consider (K_t) as a function of rainfall (R_{t-1}) at time (t-1). This means that the rainfall conditions of the previous year determine the environmental carrying capacity of the current year. 
 
 
 # Question 3
@@ -321,7 +356,7 @@ proj_4 <- rain_rk(fit_4$par, years = yrs, removals = rmv, Nhat = Nhat,
 
 ## Part 1
 
-a.)	When K is modelled as a function of the current year’s rainfall (scenario 1), the value of Beta 1 is equal to 1.04 whereas when K is modelled as a function of the previous year’s rainfall (scenario 2), this number falls to -0.0286 (See Table \@ref(tab:Beta1table)). In order to find the real effect of Beta 1 on carrying capacity, we have to take it’s exponent. When we do that for scenario 1, we see that for every unit increase in rainfall, carrying capacity by a factor of roughly 2.83. In scenario 2 we see that carrying capacity shrinks by a factor of roughly 0.98 for every unit increase in rainfall. The scale of the effect of rainfall in scenario 2 (that is rainfall from the previous year) appears much reduced compared to scenario 1. In the context of this study, it means that, based on our observations, changes in observed population numbers of wildebeest are not reflected as much in changes in the previous years rainfall compared to the current years rainfall.
+a.)	When K is modelled as a function of the current year's rainfall (scenario 1), the value of Beta 1 is equal to 1.04 whereas when K is modelled as a function of the previous year's rainfall (scenario 2), this number falls to -0.0286 (See Table \@ref(tab:Beta1table)). In order to find the real effect of Beta 1 on carrying capacity, we have to take it's exponent. When we do that for scenario 1, we see that for every unit increase in rainfall, carrying capacity by a factor of roughly 2.83. In scenario 2 we see that carrying capacity shrinks by a factor of roughly 0.98 for every unit increase in rainfall. The scale of the effect of rainfall in scenario 2 (that is rainfall from the previous year) appears much reduced compared to scenario 1. In the context of this study, it means that, based on our observations, changes in observed population numbers of wildebeest are not reflected as much in changes in the previous years rainfall compared to the current years rainfall.
 
 
 ```{r beta1 table}
@@ -343,7 +378,7 @@ kable(k_table)
 
 ```
 
-b.)	Comparison of AIC values for models generated for the two scenarios show us that modelling carrying capacity as a function of rainfall in the current year appears fits the data better than modelling it as a function of the previous year’s rainfall (Scenario 1 AIC: -19.99; Scenario 2 AIC: -17.08; See Table \@ref(tab:AICtable) for exact values).
+b.)	Comparison of AIC values for models generated for the two scenarios show us that modelling carrying capacity as a function of rainfall in the current year appears fits the data better than modelling it as a function of the previous year's rainfall (Scenario 1 AIC: -19.99; Scenario 2 AIC: -17.08; See Table \@ref(tab:AICtable) for exact values).
 
 ## Part 2
 
@@ -388,7 +423,7 @@ kable(aictab)
 
 ## Visualising how the models fit our data
 
-From Figure \@ref(fig:Plots) we can visualise the outputs for alpha a and beta 1 from the respective models. The models that factor r and K in as a function of rainfall in previous years predict populations to have fluctuated much less compared to the models that factor in r and K as a function of rainfall in the same year. This is probably due to the fact that rainfall in the previous year is not correlated as strongly with observed population in our dataset.
+From Figure \@ref(fig:Plots) we can visualise the outputs for alpha a and beta 1 from the respective models. The models that factor r and K in as a function of rainfall in previous years predict populations to have fluctuated much less compared to the models that factor in r and K as a function of rainfall in the same year. This is probably due to the fact that rainfall in the previous year is not correlated as strongly with observed population in our dataset. So, whilst rainfall could be low in year t-1, the effect on population size of wildebeest will be minimal compared to the effect of the current years rainfall. This is unsurprising given that rainfall in a given year is a good predictor of grass biomass in that year (Mduma et al., 2001). Wildebeest population sizes and growth rates are thought to primarily depend on food availability (Mduma et al., 2001; Hopcraft et al., 2015; Fritz and Duncan, 1994) and by this logic we would expect them to also vary with rainfall.
 
 
 ```{r plots, fig.width=12, warning = FALSE}
@@ -413,14 +448,25 @@ pred_plot_r <- ggplot(wildebeest, aes(x=year, y=Nhat)) +
   geom_errorbar(aes(ymin=lci,ymax=uci), width=0) +
   geom_point(size=3) +
   geom_line(data=pred_df_r, aes(x=years,y=N,color=Model,group=Model), size = 0.9) +
-  ylim(0,2.1) + ylab("Abundance (millions)") + xlab("Year") 
+  ylim(0,2.1) + ylab("Abundance (millions)") + xlab("Year") +
+  scale_color_brewer(palette = "Set1")
 
 pred_plot_k <- ggplot(wildebeest, aes(x=year, y=Nhat)) +
   geom_errorbar(aes(ymin=lci,ymax=uci), width=0) +
   geom_point(size=3) +
   geom_line(data=pred_df_k, aes(x=years,y=N,color=Model,group=Model), size = 0.9) +
-  ylim(0,2.1) + ylab("Abundance (millions)") + xlab("Year") 
+  ylim(0,2.1) + ylab("Abundance (millions)") + xlab("Year") +
+  scale_color_brewer(palette = "Set1")
 
 grid.arrange(pred_plot_k, pred_plot_r, ncol = 2)
 
 ```
+
+## Reference list
+
+Fritz, H. and Duncan, P., 1994. On the carrying capacity for large ungulates of African savanna ecosystems. Proceedings of the Royal Society of London. Series B: Biological Sciences, 256(1345), pp.77-82.
+
+Hopcraft, J.G.C., Holdo, R.M., Mwangomo, E., Mduma, S.A., Thirgood, S.J., Borner, M., Fryxell, J.M., Olff, H. and Sinclair, A.R., 2015. Why are wildebeest the most abundant herbivore in the Serengeti ecosystem. Serengeti IV: sustaining biodiversity in a coupled human-natural system, 125.
+
+Mduma, S.A., Sinclair, A.R.E. and Hilborn, R., 1999. Food regulates the Serengeti wildebeest: a 40-year record. Journal of Animal Ecology, 68(6), pp.1101-1122.
+
