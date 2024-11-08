@@ -60,9 +60,6 @@ ageing <- function(pop){
 
 Lastly in the model comes reproduction. As animals in years 2 and 3 give birth to a discrete number of individuals at a rate with constant mean, the poisson distribution is appropriate to use for reproduction. This can be implemented by summing the poisson additions from all adults. You could also generate a single observation from a single combined poisson variable, but I find this the most intuitive way to formulate the code.
 
-<<<<<<< HEAD
-$$ $$
-
 ```{r, eval=FALSE, echo = TRUE}
 
 reproduction <- function(pop, rho){
@@ -76,9 +73,6 @@ reproduction <- function(pop, rho){
 ```
 
 Finally, once the underlying dynamics have been implemented, we have to add a final stochastic component - detection. There is no double counting and each individual has a fixed probability of being detected or not detected so detection can be implemented using a binomial distribution, in a very similar way to survival earlier.
-
-<<<<<<< HEAD
-$$ $$
 
 ```{r, eval=FALSE, echo = TRUE}
 
@@ -469,4 +463,3 @@ Fritz, H. and Duncan, P., 1994. On the carrying capacity for large ungulates of 
 Hopcraft, J.G.C., Holdo, R.M., Mwangomo, E., Mduma, S.A., Thirgood, S.J., Borner, M., Fryxell, J.M., Olff, H. and Sinclair, A.R., 2015. Why are wildebeest the most abundant herbivore in the Serengeti ecosystem. Serengeti IV: sustaining biodiversity in a coupled human-natural system, 125.
 
 Mduma, S.A., Sinclair, A.R.E. and Hilborn, R., 1999. Food regulates the Serengeti wildebeest: a 40-year record. Journal of Animal Ecology, 68(6), pp.1101-1122.
-
